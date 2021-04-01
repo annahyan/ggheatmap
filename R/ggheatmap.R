@@ -45,13 +45,13 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         heat_plot = heat_plot +
             ggplot2::geom_point(aes(color = value, size = abs(value) ) ) +
             ggplot2::scale_color_distiller(palette = colorPalette, name = scaleName,
-                                           direction=ifelse(revColors,0,1)) +
+                                           direction=ifelse(revColors,1,-1)) +
             guides(size = "none")
     } else {
         heat_plot = heat_plot +
             ggplot2::geom_tile(aes(fill = value) ) +
             ggplot2::scale_fill_distiller(palette = colorPalette, name = scaleName,
-                                          direction=ifelse(revColors,0,1))
+                                          direction=ifelse(revColors,1,-1))
     }
 
     heat_plot = heat_plot +  
