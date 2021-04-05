@@ -18,7 +18,7 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       fontSize = 20,
                       colorPalette = "Spectral",
                       scaleName = "value", distMethod = "euclidean", 
-    clustMethod = "complete", revColors=F) {
+    clustMethod = "complete", revColors=F, ...) {
     
     data_m <- tibble::rownames_to_column(dataMatrix) %>% reshape2::melt()
     
@@ -45,7 +45,8 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         heat_plot = heat_plot +
             ggplot2::geom_point(aes(color = value, size = abs(value) ) ) +
             ggplot2::scale_color_distiller(palette = colorPalette, name = scaleName,
-                                           direction=ifelse(revColors,1,-1)) +
+                                           direction=ifelse(revColors,1,-1), ...) +
+            ## scale_color_gradient2(low = "blue", high = "red") +
             guides(size = "none")
     } else {
         heat_plot = heat_plot +
