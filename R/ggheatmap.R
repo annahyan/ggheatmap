@@ -4,6 +4,8 @@
 #' @param orderCol Reorder the columns (default=T)
 #' @param orderRow Reorder the rows (default=T)
 #' @param dendroLineSize Size of the dendrogram lines (default=0.5)
+#' @param revCol reverse the column order
+#' @param revRow revers the row order
 #' @param fontSize Font size (default=20)
 #' @param colorPalette Color palette (default='Spectral')
 #' @param revColors Invert color scale
@@ -14,7 +16,9 @@
 #' @importFrom magrittr %>%
 #' @export 
 ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
-                      dendroLineSize = 0.5, 
+                      dendroLineSize = 0.5,
+                      revCol = F,
+                      revRow = F, 
                       fontSize = 20,
                       colorPalette = "Spectral",
                       scaleName = "value", distMethod = "euclidean", 
@@ -24,7 +28,11 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
     
     # Cluster rows
     if (orderRow) {
-        dd.row <- as.dendrogram(hclust(dist(dataMatrix, method = distMethod), method = clustMethod))
+        dd.row <- as.dendrogram(hclust(dist(dataMatrix, method = distMethod),
+                                       method = clustMethod))
+
+        if (revRow) dd.row = rev(dd.row)
+        
         row.ord <- order.dendrogram(dd.row)
         ordered_row_names <- row.names(dataMatrix[row.ord, ])
         data_m$rowname <- factor(data_m$rowname, levels = ordered_row_names)
@@ -33,7 +41,10 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
     # Cluster columns
     if (orderCol) {
         dd.col <- as.dendrogram(hclust(dist(t(dataMatrix), method = distMethod), 
-                      method = clustMethod))
+                                       method = clustMethod))
+
+        if (revCol) dd.col = rev(dd.col)
+            
         col.ord <- order.dendrogram(dd.col)
         ordered_col_names <- colnames(dataMatrix[, col.ord])
         data_m$variable <- factor(data_m$variable, levels = ordered_col_names)
