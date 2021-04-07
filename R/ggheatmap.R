@@ -39,7 +39,7 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         ordered_row_names <- row.names(dataMatrix[row.ord, ])
         data_m$rowname <- factor(data_m$rowname, levels = ordered_row_names)
 
-        if (!is.na(rowLabels)) levels(data_m$rowname ) = rowLabels
+        if (!is.na(rowLabels)) levels(data_m$rowname ) = rowLabels[levels(data_m$rowname )]
     }
     
     # Cluster columns
@@ -52,7 +52,7 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         col.ord <- order.dendrogram(dd.col)
         ordered_col_names <- colnames(dataMatrix[, col.ord])
         data_m$variable <- factor(data_m$variable, levels = ordered_col_names)
-        if (!is.na(colLabels)) levels(data_m$variable ) = colLabels
+        if (!is.na(colLabels)) levels(data_m$variable ) = colLabels[levels(data_m$variable )]
     }
     
     heat_plot <- ggplot2::ggplot(data_m, ggplot2::aes(x = variable, y = rowname))
