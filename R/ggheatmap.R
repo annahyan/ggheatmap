@@ -18,7 +18,9 @@
 ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       dendroLineSize = 0.5,
                       revCol = F,
-                      revRow = F, 
+                      revRow = F,
+                      rowLabels = NA,
+                      colLabels = NA,
                       fontSize = 20,
                       colorPalette = "Spectral",
                       scaleName = "value", distMethod = "euclidean", 
@@ -36,6 +38,8 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         row.ord <- order.dendrogram(dd.row)
         ordered_row_names <- row.names(dataMatrix[row.ord, ])
         data_m$rowname <- factor(data_m$rowname, levels = ordered_row_names)
+
+        if (!is.na(rowLabels)) levels(data_m$rowname ) = rowLabels
     }
     
     # Cluster columns
@@ -48,6 +52,7 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         col.ord <- order.dendrogram(dd.col)
         ordered_col_names <- colnames(dataMatrix[, col.ord])
         data_m$variable <- factor(data_m$variable, levels = ordered_col_names)
+        if (!is.na(colLabels)) levels(data_m$variable ) = colLabels
     }
     
     heat_plot <- ggplot2::ggplot(data_m, ggplot2::aes(x = variable, y = rowname))
@@ -65,7 +70,7 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
             ggplot2::scale_fill_distiller(palette = colorPalette, name = scaleName,
                                           direction=ifelse(revColors,1,-1), ... )
     }
-
+    
     heat_plot = heat_plot +  
                      ggplot2::theme_minimal() + 
 		     ggplot2::theme(axis.line = ggplot2::element_line(size = 0),
