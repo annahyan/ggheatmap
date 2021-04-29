@@ -28,7 +28,8 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       vlines = FALSE,
                       vlinecol = NULL,
                       vlinesize = NULL,
-                      colorPalette = "Spectral",
+                      viridis = FALSE,
+                      colorPalette = "default",
                       scaleName = "value", distMethod = "euclidean", 
     clustMethod = "complete", revColors=F, ...) {
     
@@ -64,23 +65,42 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
 
     if (!is.na(colLabels)) levels(data_m$variable ) = colLabels[levels(data_m$variable )]
 
+    if (colorPalette == "default") {
+        if (viridis) {
+            colorPalette = "viridis"
+        } else {
+            colorPalette = "Spectral"
+        }
+    }
+    
     
     heat_plot <- ggplot2::ggplot(data_m, ggplot2::aes(x = variable, y = rowname))
 
     if (points == TRUE) {
         heat_plot = heat_plot +
             ggplot2::geom_point(aes(color = value, size = abs(value) ) ) +
-            ggplot2::scale_color_distiller(palette = colorPalette, name = scaleName,
-                                           direction=ifelse(revColors,1,-1), ...) +
-            ## scale_color_gradient2(low = "blue", high = "red") +
-            guides(size = "none")
+
+        if (viridis) {
+            heat_plot = heat_plot + viridis::scale_color_viridis(option = colorPalette)
+        } else {
+            heat_plot = heat_plot +
+                ggplot2::scale_color_distiller(palette = colorPalette, name = scaleName,
+                                               direction=ifelse(revColors,1,-1), ...) +
+                guides(size = "none")
+        }
+
     } else {
         heat_plot = heat_plot +
-            ggplot2::geom_tile(aes(fill = value) ) +
+            ggplot2::geom_tile(aes(fill = value) )
             ## ggplot2::geom_vline(xintercept=1:nlevels(data_m$variable) + 0.5,
-            ##                     color = "gray40" ,size=0.6) +
-            ggplot2::scale_fill_distiller(palette = colorPalette, name = scaleName,
-                                          direction=ifelse(revColors,1,-1), ... )
+        ##                     color = "gray40" ,size=0.6)+
+        if (viridis) {
+            heat_plot = heat_plot + viridis::scale_fill_viridis(option = colorPalette)
+        } else {
+            heat_plot = heat_plot +
+                ggplot2::scale_fill_distiller(palette = colorPalette, name = scaleName,
+                                              direction=ifelse(revColors,1,-1), ... )
+        }
     }
     
     heat_plot = heat_plot +  
