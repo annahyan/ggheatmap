@@ -4,9 +4,27 @@
 \alias{ggheatmap}
 \title{Generate a ggplot2 heatmap with row and column dendrograms}
 \usage{
-ggheatmap(dataMatrix, orderCol = T, orderRow = T, dendroLineSize = 0.5,
-  fontSize = 20, colorScheme = "Spectral", scaleName = "value",
-  distMethod = "euclidean", clustMethod = "complete")
+ggheatmap(
+  dataMatrix,
+  orderCol = T,
+  orderRow = T,
+  points = F,
+  dendroLineSize = 0.5,
+  revCol = F,
+  revRow = F,
+  rowLabels = NA,
+  colLabels = NA,
+  fontSize = 20,
+  vlines = FALSE,
+  vlinecol = NULL,
+  vlinesize = NULL,
+  colorPalette = "Spectral",
+  scaleName = "value",
+  distMethod = "euclidean",
+  clustMethod = "complete",
+  revColors = F,
+  ...
+)
 }
 \arguments{
 \item{dataMatrix}{A data.frame containing the input data.}
@@ -17,15 +35,27 @@ ggheatmap(dataMatrix, orderCol = T, orderRow = T, dendroLineSize = 0.5,
 
 \item{dendroLineSize}{Size of the dendrogram lines (default=0.5)}
 
+\item{revCol}{reverse the column order}
+
+\item{revRow}{revers the row order}
+
 \item{fontSize}{Font size (default=20)}
 
-\item{scaleName}{Name of the colorscale (default="value")}
+\item{vlines}{Add vertical lines (default = FALSE)}
 
-\item{distMethod}{Distance method (default="euclidean", see ?dist)}
+\item{vlinecol}{Color of vertical lines if specified}
 
-\item{clustMethod}{Clustering method (default="complete", see ?hclust)}
+\item{vlinesize}{Size of vertical colors if specified}
 
-\item{colorPalette}{Color palette (default="Spectral")}
+\item{colorPalette}{Color palette (default='Spectral')}
+
+\item{scaleName}{Name of the colorscale (default='value')}
+
+\item{distMethod}{Distance method (default='euclidean', see ?dist)}
+
+\item{clustMethod}{Clustering method (default='complete', see ?hclust)}
+
+\item{revColors}{Invert color scale}
 }
 \description{
 Generate a ggplot2 heatmap with row and column dendrograms

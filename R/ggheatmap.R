@@ -7,6 +7,9 @@
 #' @param revCol reverse the column order
 #' @param revRow revers the row order
 #' @param fontSize Font size (default=20)
+#' @param vlines Add vertical lines (default = FALSE)
+#' @param vlinecol Color of vertical lines if specified
+#' @param vlinesize Size of vertical colors if specified
 #' @param colorPalette Color palette (default='Spectral')
 #' @param revColors Invert color scale
 #' @param scaleName Name of the colorscale (default='value')
@@ -22,6 +25,9 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       rowLabels = NA,
                       colLabels = NA,
                       fontSize = 20,
+                      vlines = FALSE,
+                      vlinecol = NULL,
+                      vlinesize = NULL,
                       colorPalette = "Spectral",
                       scaleName = "value", distMethod = "euclidean", 
     clustMethod = "complete", revColors=F, ...) {
@@ -71,6 +77,8 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
     } else {
         heat_plot = heat_plot +
             ggplot2::geom_tile(aes(fill = value) ) +
+            ## ggplot2::geom_vline(xintercept=1:nlevels(data_m$variable) + 0.5,
+            ##                     color = "gray40" ,size=0.6) +
             ggplot2::scale_fill_distiller(palette = colorPalette, name = scaleName,
                                           direction=ifelse(revColors,1,-1), ... )
     }
@@ -84,8 +92,20 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                      ggplot2::scale_y_discrete(position = "right") + 
                      ggplot2::xlab("") + 
 		     ggplot2::ylab("")
-		     
-    
+
+    if (vlines) {
+        if (is.null(vlinecol)) vlinecol = "gray40"
+        if (is.null(vlinesize)) vlinesize = 0.8
+                           
+        segment_data = data.frame(xstarts = 1:nlevels(data_m$variable) + 0.5,
+                                  xends = 1:nlevels(data_m$variable) + 0.5,
+                                  ystarts = 0.5, yends = nlevels(data_m$rowname)+ 0.5)
+
+        heat_plot = heat_plot +
+            ggplot2::geom_segment(aes(x = xstarts, y = ystarts, xend = xends, yend = yends),
+                                  color = vlinecol, size = vlinesize,
+                                  data = segment_data)
+    }
     final_plot <- heat_plot
 
     if (orderRow) {
