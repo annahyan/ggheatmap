@@ -17,6 +17,7 @@
 #' @param clustMethod Clustering method (default='complete', see ?hclust)
 #' @examples ggheatmap(mtcars)
 #' @importFrom magrittr %>%
+#' @import ggplot2
 #' @export 
 ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       dendroLineSize = 0.5,
@@ -75,18 +76,19 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
     
     
     heat_plot <- ggplot2::ggplot(data_m, ggplot2::aes(x = variable, y = rowname))
-
+    
     if (points == TRUE) {
         heat_plot = heat_plot +
             ggplot2::geom_point(aes(color = value, size = abs(value) ) ) +
-
+            guides(size = "none")
+        
         if (viridis) {
-            heat_plot = heat_plot + viridis::scale_color_viridis(option = colorPalette)
+            heat_plot = heat_plot +
+                viridis::scale_color_viridis(option = colorPalette,name = scaleName)
         } else {
             heat_plot = heat_plot +
                 ggplot2::scale_color_distiller(palette = colorPalette, name = scaleName,
-                                               direction=ifelse(revColors,1,-1), ...) +
-                guides(size = "none")
+                                               direction=ifelse(revColors,1,-1), ...)
         }
 
     } else {
@@ -95,7 +97,8 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
             ## ggplot2::geom_vline(xintercept=1:nlevels(data_m$variable) + 0.5,
         ##                     color = "gray40" ,size=0.6)+
         if (viridis) {
-            heat_plot = heat_plot + viridis::scale_fill_viridis(option = colorPalette)
+            heat_plot = heat_plot +
+                viridis::scale_fill_viridis(option = colorPalette, name = scaleName)
         } else {
             heat_plot = heat_plot +
                 ggplot2::scale_fill_distiller(palette = colorPalette, name = scaleName,
