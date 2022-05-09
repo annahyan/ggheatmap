@@ -24,6 +24,7 @@ ggheatmap(
   distMethod = "euclidean",
   clustMethod = "complete",
   revColors = F,
+  title = NULL,
   ...
 )
 }
@@ -57,6 +58,8 @@ ggheatmap(
 \item{clustMethod}{Clustering method (default='complete', see ?hclust)}
 
 \item{revColors}{Invert color scale}
+
+\item{title}{Title of the plot (default=NULL)}
 }
 \description{
 Generate a ggplot2 heatmap with row and column dendrograms

@@ -12,6 +12,7 @@
 #' @param vlinesize Size of vertical colors if specified
 #' @param colorPalette Color palette (default='Spectral')
 #' @param revColors Invert color scale
+#' @param title Title of the plot (default=NULL) 
 #' @param scaleName Name of the colorscale (default='value')
 #' @param distMethod Distance method (default='euclidean', see ?dist)
 #' @param clustMethod Clustering method (default='complete', see ?hclust)
@@ -31,8 +32,11 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       vlinesize = NULL,
                       viridis = FALSE,
                       colorPalette = "default",
-                      scaleName = "value", distMethod = "euclidean", 
-    clustMethod = "complete", revColors=F, ...) {
+                      scaleName = "value",
+                      distMethod = "euclidean",
+                      clustMethod = "complete",
+                      revColors=F,
+                      title = NULL, ...) {
     
     data_m <- tibble::rownames_to_column(dataMatrix) %>% reshape2::melt()
     
@@ -107,14 +111,18 @@ ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
     }
     
     heat_plot = heat_plot +  
-                     ggplot2::theme_minimal() + 
-		     ggplot2::theme(axis.line = ggplot2::element_line(size = 0),
-		         text = ggplot2::element_text(size = fontSize),
-			 axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5),
-                         panel.border = element_rect(color = "gray20", fill = NA) ) + 
-                     ggplot2::scale_y_discrete(position = "right") + 
-                     ggplot2::xlab("") + 
-		     ggplot2::ylab("")
+        ggplot2::theme_minimal() + 
+        ggplot2::theme(axis.line = ggplot2::element_line(size = 0),
+                       text = ggplot2::element_text(size = fontSize),
+                       axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5),
+                       panel.border = element_rect(color = "gray20", fill = NA) ) + 
+        ggplot2::scale_y_discrete(position = "right") + 
+        ggplot2::xlab("") + 
+        ggplot2::ylab("")
+    
+    if (! is.null(title)) {
+        heat_plot = heat_plot + ggtitle(title)
+    }
 
     if (vlines) {
         if (is.null(vlinecol)) vlinecol = "gray40"
