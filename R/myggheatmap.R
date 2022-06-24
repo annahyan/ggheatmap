@@ -11,16 +11,16 @@
 #' @param vlinecol Color of vertical lines if specified
 #' @param vlinesize Size of vertical colors if specified
 #' @param colorPalette Color palette (default='Spectral')
-#' @param revColors Invert color scale
-#' @param title Title of the plot (default=NULL) 
 #' @param scaleName Name of the colorscale (default='value')
 #' @param distMethod Distance method (default='euclidean', see ?dist)
 #' @param clustMethod Clustering method (default='complete', see ?hclust)
-#' @examples ggheatmap(mtcars)
+#' @param revColors Invert color scale
+#' @param title Title of the plot (default=NULL) 
+#' @examples myggheatmap(mtcars)
 #' @importFrom magrittr %>%
 #' @import ggplot2
 #' @export 
-ggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
+myggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
                       dendroLineSize = 0.5,
                       revCol = F,
                       revRow = F,
