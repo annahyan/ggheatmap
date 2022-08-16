@@ -48,7 +48,7 @@ myggheatmap <- function(dataMatrix, orderCol = T, orderRow = T, points = F,
         if (revRow) dd.row = rev(dd.row)
         
         row.ord <- order.dendrogram(dd.row)
-        ordered_row_names <- row.names(dataMatrix[row.ord, ])
+        ordered_row_names <- row.names(dataMatrix[row.ord, , drop = FALSE])
         data_m$rowname <- factor(data_m$rowname, levels = ordered_row_names)
 
         
